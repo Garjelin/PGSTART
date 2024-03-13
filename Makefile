@@ -12,7 +12,7 @@ LIB_EQUANTION_O = lib_*.o
 OUTDIR = BUILD
 TESTDIR = TESTS
 LIBDIR = quadratic_equation
-SUITE_CASES_CPP = suite_*.c
+SUITE_CASES_C = suite_*.c
 SUITE_CASES_O = suite_*.o
 
 all: clean gcov_report
@@ -28,20 +28,14 @@ lib_quadratic_equation.a:
 	ranlib $(OUTDIR)/lib_quadratic_equation.a
 
 check: lib_quadratic_equation.a
-	# for file in $(TESTDIR)/$(SUITE_CASES_CPP); do \
-	# 	$(CC) $(FLAG_C) $(FLAG_ER) $$file -o $(OUTDIR)/$$(basename $$file .c).o; \
-	# done
-	# $(CC) $(FLAG_C) $(FLAG_ER) $(TESTDIR)/main.c -o $(OUTDIR)/main.o
-	# $(CC) $(FLAG_ER) $(FLAG_COV) $(FLAG_O) tests $(TESTDIR)/$(SUITE_CASES_CPP) $(OUTDIR)/main.o $(OUTDIR)/$(SUITE_CASES_O) $(FLAG_TESTS)
-
-	$(CC) $(FLAG_C) $(FLAG_ER) $(SUITE_CASES_CPP) main.c
-	# $(CC) $(FLAG_ER) $(FLAG_COV) $(FLAG_O) tests $(LIBDIR)/$(LIB_EQUANTION_C) main.o $(SUITE_CASES_O) $(FLAG_TESTS)
-
-
-	# ./$(OUTDIR)/tests
+	for file in $(TESTDIR)/$(SUITE_CASES_C) $(TESTDIR)/main.c; do \
+		$(CC) $(FLAG_C) $(FLAG_ER) $$file -o $(OUTDIR)/$$(basename $$file .c).o; \
+	done
+	$(CC) $(FLAG_ER) $(FLAG_COV) $(FLAG_O) $(OUTDIR)/tests $(OUTDIR)/main.o $(OUTDIR)/$(SUITE_CASES_O) $(OUTDIR)/lib_quadratic_equation.a $(FLAG_TESTS)
+	./$(OUTDIR)/tests
 
 asan: lib_quadratic_equation.a
-	for file in $(TESTDIR)/$(SUITE_CASES_CPP); do \
+	for file in $(TESTDIR)/$(SUITE_CASES_C); do \
 		$(CC) $(FLAG_C) $(FLAG_ER) $$file -o $(OUTDIR)/$$(basename $$file .c).o; \
 	done
 	$(CC) $(FLAG_ER) $(FLAG_COV) -o $(OUTDIR)/tests $(OUTDIR)/$(SUITE_CASES_O) $(OUTDIR)/lib_quadratic_equation.a $(FLAG_TESTS) $(ASAN)
