@@ -65,8 +65,5 @@ dist:
 
 clean:
 	-rm -rf BUILD
-	-rm *.tar.gz
+	-rm -rf *.tar.gz
 	-rm -rf *.o *.html *.gcda *.gcno *.css *.a *.gcov *.info *.out *.cfg *.txt
-	-rm -f tests
-	-rm -f report
-	find . -type d -name 'tests.dSYM' -exec rm -r {} +
