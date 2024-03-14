@@ -1,7 +1,7 @@
 #include "quadratic_equation_suitecases.h"
 
 int main(void) {
-  Suite *cases[] = {suite_s21_add(), NULL};
+  Suite *cases[] = {suite_quadratic_equation(), NULL};
 
   for (Suite **current_testcase = cases; *current_testcase != NULL;
        current_testcase++) {

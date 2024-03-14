@@ -35,33 +35,37 @@ check: lib_quadratic_equation.a
 	./$(OUTDIR)/tests
 
 asan: lib_quadratic_equation.a
-	for file in $(TESTDIR)/$(SUITE_CASES_C); do \
+	for file in $(TESTDIR)/$(SUITE_CASES_C) $(TESTDIR)/main.c; do \
 		$(CC) $(FLAG_C) $(FLAG_ER) $$file -o $(OUTDIR)/$$(basename $$file .c).o; \
 	done
-	$(CC) $(FLAG_ER) $(FLAG_COV) -o $(OUTDIR)/tests $(OUTDIR)/$(SUITE_CASES_O) $(OUTDIR)/lib_quadratic_equation.a $(FLAG_TESTS) $(ASAN)
+	$(CC) $(FLAG_ER) $(FLAG_COV) $(FLAG_O) $(OUTDIR)/tests $(OUTDIR)/main.o $(OUTDIR)/$(SUITE_CASES_O) $(OUTDIR)/lib_quadratic_equation.a $(FLAG_TESTS) $(ASAN)
 	./$(OUTDIR)/tests
 
 valgrind_test: lib_quadratic_equation.a
-	for file in $(TESTDIR)/$(SUITE_CASES_CPP); do \
-		$(CC) $(FLAG_C) $(FLAG_ER) $$file -o $(OUTDIR)/$$(basename $$file .c).o -g; \
+	for file in $(TESTDIR)/$(SUITE_CASES_C) $(TESTDIR)/main.c; do \
+		$(CC) $(FLAG_C) $(FLAG_ER) $$file -o $(OUTDIR)/$$(basename $$file .c).o; \
 	done
-	$(CC) $(FLAG_ER) $(FLAG_COV) -o $(OUTDIR)/tests $(OUTDIR)/$(SUITE_CASES_O) $(OUTDIR)/lib_quadratic_equation.a $(FLAG_TESTS)
+	$(CC) $(FLAG_ER) $(FLAG_COV) $(FLAG_O) $(OUTDIR)/tests $(OUTDIR)/main.o $(OUTDIR)/$(SUITE_CASES_O) $(OUTDIR)/lib_quadratic_equation.a $(FLAG_TESTS)
 	valgrind $(VALGRIND_FLAGS) ./$(OUTDIR)/tests
 
 gcov_report: check
 	gcovr --html-details -o $(OUTDIR)/report.html
 
 cpp_check:
-	cppcheck --enable=all --force $(LIBDIR)/*.h $(LIBDIR)/*.c $(TESTDIR)/*.c
+	cppcheck --enable=all --force $(LIBDIR)/*.h $(LIBDIR)/*.c $(TESTDIR)/*.c $(TESTDIR)/*.h
 
 style_check:
-	cp ../materials/linters/.clang-format ./
+	cp TESTS/.clang-format ./
 	clang-format -n $(LIBDIR)/*.h $(LIBDIR)/*.c $(TESTDIR)/*.c
 	clang-format -i $(LIBDIR)/*.h $(LIBDIR)/*.c $(TESTDIR)/*.c
 	rm -rf .clang-format
 
+dist:
+	tar -czf quadratic_equation.tar.gz ./*
+
 clean:
 	-rm -rf BUILD
+	-rm *.tar.gz
 	-rm -rf *.o *.html *.gcda *.gcno *.css *.a *.gcov *.info *.out *.cfg *.txt
 	-rm -f tests
 	-rm -f report
