@@ -92,7 +92,15 @@ START_TEST(quadratic_equation_11) {  // позитивный, a,b,c = 0
 }
 END_TEST
 
-START_TEST(quadratic_equation_12) {  // негативный, a = NAN
+START_TEST(quadratic_equation_12) {  // позитивный, D = 0
+  EquationSolution sol = solve_equation(1, 2, 1);
+  ck_assert_double_eq_tol(sol.root1, -1, 1e-15);
+  ck_assert_double_eq_tol(sol.root2, 0, 1e-15);
+  ck_assert_int_eq(sol.num_roots, 1);
+}
+END_TEST
+
+START_TEST(quadratic_equation_13) {  // негативный, a = NAN
   EquationSolution sol = solve_equation(NAN, 1, 1);
   ck_assert_double_eq_tol(sol.root1, 0, 1e-15);
   ck_assert_double_eq_tol(sol.root2, 0, 1e-15);
@@ -100,7 +108,7 @@ START_TEST(quadratic_equation_12) {  // негативный, a = NAN
 }
 END_TEST
 
-START_TEST(quadratic_equation_13) {  // негативный, b = NAN
+START_TEST(quadratic_equation_14) {  // негативный, b = NAN
   EquationSolution sol = solve_equation(1, NAN, 1);
   ck_assert_double_eq_tol(sol.root1, 0, 1e-15);
   ck_assert_double_eq_tol(sol.root2, 0, 1e-15);
@@ -108,7 +116,7 @@ START_TEST(quadratic_equation_13) {  // негативный, b = NAN
 }
 END_TEST
 
-START_TEST(quadratic_equation_14) {  // негативный, c = NAN
+START_TEST(quadratic_equation_15) {  // негативный, c = NAN
   EquationSolution sol = solve_equation(1, 1, NAN);
   ck_assert_double_eq_tol(sol.root1, 0, 1e-15);
   ck_assert_double_eq_tol(sol.root2, 0, 1e-15);
@@ -116,7 +124,7 @@ START_TEST(quadratic_equation_14) {  // негативный, c = NAN
 }
 END_TEST
 
-START_TEST(quadratic_equation_15) {  // негативный, a = INFINITY
+START_TEST(quadratic_equation_16) {  // негативный, a = INFINITY
   EquationSolution sol = solve_equation(INFINITY, 1, 1);
   ck_assert_double_eq_tol(sol.root1, 0, 1e-15);
   ck_assert_double_eq_tol(sol.root2, 0, 1e-15);
@@ -124,7 +132,7 @@ START_TEST(quadratic_equation_15) {  // негативный, a = INFINITY
 }
 END_TEST
 
-START_TEST(quadratic_equation_16) {  // негативный, b = INFINITY
+START_TEST(quadratic_equation_17) {  // негативный, b = INFINITY
   EquationSolution sol = solve_equation(1, INFINITY, 1);
   ck_assert_double_eq_tol(sol.root1, 0, 1e-15);
   ck_assert_double_eq_tol(sol.root2, 0, 1e-15);
@@ -132,7 +140,7 @@ START_TEST(quadratic_equation_16) {  // негативный, b = INFINITY
 }
 END_TEST
 
-START_TEST(quadratic_equation_17) {  // негативный, c = INFINITY
+START_TEST(quadratic_equation_18) {  // негативный, c = INFINITY
   EquationSolution sol = solve_equation(1, 1, INFINITY);
   ck_assert_double_eq_tol(sol.root1, 0, 1e-15);
   ck_assert_double_eq_tol(sol.root2, 0, 1e-15);
@@ -162,5 +170,6 @@ Suite *suite_quadratic_equation(void) {
   tcase_add_test(tc, quadratic_equation_15);
   tcase_add_test(tc, quadratic_equation_16);
   tcase_add_test(tc, quadratic_equation_17);
+  tcase_add_test(tc, quadratic_equation_18);
   return s;
 }
